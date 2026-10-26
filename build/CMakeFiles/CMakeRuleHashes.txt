@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-5914bb9cfb65f76a9552a784bd3fbb42 DevisVinil_artefacts/JuceLibraryCode/DevisVinil_Standalone/PkgInfo
-f29f4af546947f594d9ad8aa4f1ed383 DevisVinil_artefacts/JuceLibraryCode/DevisVinil_VST3/PkgInfo

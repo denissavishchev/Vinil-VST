@@ -51,14 +51,20 @@ static void snapshot (const char* path)
     juce::ScopedJuceInitialiser_GUI gui;
     VinilProcessor p;
     p.prepareToPlay (48000.0, 256);
-    p.curve.pts = shapes::make (1, 2.0f);
-    for (int b = 0; b < 200; ++b)
+    p.curve.pts = shapes::make (8, 2.0f);   // BABY scratch
+    juce::Random rnd (3);
+    long t = 0;
+    for (int b = 0; b < (int) (10.3 * 48000.0 / 256.0); ++b)   // fill the whole 10 s window with a drum-like loop
     {
         juce::AudioBuffer<float> buf (2, 256);
         juce::MidiBuffer m;
-        for (int i = 0; i < 256; ++i)
+        for (int i = 0; i < 256; ++i, ++t)
         {
-            const float v = 0.5f * std::sin (0.06f * (float) (b * 256 + i)) * (0.4f + 0.6f * std::sin (0.0007f * (float) (b * 256 + i)));
+            const float tb = std::fmod ((float) t / 48000.0f, 0.5f);
+            const float beat = (float) (long) ((float) t / 24000.0f);
+            const float kick = std::sin (2.0f * 3.14159f * (55.0f + 90.0f * std::exp (-tb * 30.0f)) * tb) * std::exp (-tb * 6.0f);
+            const float hat = (std::fmod (beat, 2.0f) == 1.0f ? 0.25f : 0.1f) * (rnd.nextFloat() - 0.5f) * std::exp (-tb * 40.0f);
+            const float v = 0.75f * kick + hat;
             buf.setSample (0, i, v);
             buf.setSample (1, i, v);
         }
